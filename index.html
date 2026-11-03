@@ -1,1 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Cookie Clicker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #2d2d44);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffd700;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+        }
+
+        .cps-display {
+            font-size: 1rem;
+            color: #a0a0c0;
+            margin-bottom: 20px;
+        }
+
+        .cookie-btn {
+            background: radial-gradient(circle, #d27d2d, #8b5a2b);
+            border: 8px solid #5c3a1a;
+            border-radius: 50%;
+            width: 180px;
+            height: 180px;
+            cursor: pointer;
+            outline: none;
+            position: relative;
+            box-shadow: 0 8px 0 #402812, 0 15px 20px rgba(0,0,0,0.5);
+            transition: transform 0.05s ease, box-shadow 0.05s ease;
+            margin: 20px 0;
+        }
+
+        .cookie-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #402812, 0 8px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Cookie Chocolate Chips */
+        .cookie-btn::before {
+            content: '';
+            position: absolute;
+            top: 30px; left: 40px; width: 18px; height: 14px; background: #3d2511; border-radius: 40%;
+            box-shadow: 60px 20px 0 #3d2511, 20px 70px 0 #3d2511, 80px 75px 0 #3d2511, 45px 40px 0 #3d2511, -10px 50px 0 #3d2511;
+        }
+
+        .shop-container {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .shop-title {
+            font-size: 1.2rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            color: #ff79c6;
+        }
+
+        .upgrade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: background 0.2s, transform 0.2s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .upgrade-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02);
+        }
+
+        .upgrade-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .upgrade-info .name {
+            font-weight: bold;
+            display: block;
+        }
+
+        .upgrade-info .effect {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .upgrade-cost {
+            font-weight: bold;
+            color: #ffd700;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        /* Floating numbers on click */
+        .floating-text {
+            position: absolute;
+            color: #00ffcc;
+            font-weight: bold;
+            font-size: 1.5rem;
+            pointer-events: none;
+            animation: floatUp 0.8s ease-out forwards;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(0.8); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Bakery Clicker</h1>
+        <div class="score-display" id="score">0 Cookies</div>
+        <div class="cps-display" id="cps">0.0 cookies per second</div>
+        
+        <button class="cookie-btn" id="cookie-btn"></button>
+
+        <div class="shop-container">
+            <div class="shop-title">Upgrades Shop</div>
+            
+            <!-- Upgrade 1 -->
+            <div class="upgrade-item disabled" id="upgrade-cursor" onclick="buyUpgrade('cursor')">
+                <div class="upgrade-info">
+                    <span class="name">Auto-Clicker (<span id="count-cursor">0</span>)</span>
+                    <span class="effect">+0.1 CPS</span>
+                </div>
+                <div class="upgrade-cost" id="cost-cursor">15</div>
+            </div>
+
+            <!-- Upgrade 2 -->
+            <div class="upgrade-item disabled" id="upgrade-grandma" onclick="buyUpgrade('grandma')">
+                <div class="upgrade-info">
+                    <span class="name">Grandma (<span id="count-grandma">0</span>)</span>
+                    <span class="effect">+1.0 CPS</span>
+                </div>
+                <div class="upgrade-cost" id="cost-grandma">100</div>
+            </div>
+
+            <!-- Upgrade 3 -->
+            <div class="upgrade-item disabled" id="upgrade-factory" onclick="buyUpgrade('factory')">
+                <div class="upgrade-info">
+                    <span class="name">Cookie Factory (<span id="count-factory">0</span>)</span>
+                    <span class="effect">+8.0 CPS</span>
+                </div>
+                <div class="upgrade-cost" id="cost-factory">1100</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let score = 0;
+        let cookiesPerSecond = 0;
+
+        const upgrades = {
+            cursor: { count: 0, cost: 15, cps: 0.1, baseCost: 15 },
+            grandma: { count: 0, cost: 100, cps: 1.0, baseCost: 100 },
+            factory: { count: 0, cost: 1100, cps: 8.0, baseCost: 1100 }
+        };
+
+        // Elements
+        const scoreEl = document.getElementById('score');
+        const cpsEl = document.getElementById('cps');
+        const cookieBtn = document.getElementById('cookie-btn');
+
+        // Click Cookie Action
+        cookieBtn.addEventListener('click', (e) => {
+            score += 1;
+            updateDisplay();
+            createFloatingText(e.clientX, e.clientY, "+1");
+        });
+
+        // Floating Number Effect
+        function createFloatingText(x, y, text) {
+            const el = document.createElement('div');
+            el.className = 'floating-text';
+            el.innerText = text;
+            el.style.left = `${x - 15}px`;
+            el.style.top = `${y - 25}px`;
+            document.body.appendChild(el);
+            
+            setTimeout(() => el.remove(), 800);
+        }
+
+        // Buy Upgrade Action
+        function buyUpgrade(type) {
+            const item = upgrades[type];
+            if (score >= item.cost) {
+                score -= item.cost;
+                item.count++;
+                // Increase cost exponentially (15% increase)
+                item.cost = Math.ceil(item.baseCost * Math.pow(1.15, item.count));
+                
+                calculateCPS();
+                updateDisplay();
+            }
+        }
+
+        // Calculate total CPS
+        function calculateCPS() {
+            cookiesPerSecond = 0;
+            for (let key in upgrades) {
+                cookiesPerSecond += upgrades[key].count * upgrades[key].cps;
+            }
+        }
+
+        // Update UI Look
+        function updateDisplay() {
+            // Update Text strings
+            scoreEl.innerText = `${Math.floor(score)} Cookie${Math.floor(score) === 1 ? '' : 's'}`;
+            cpsEl.innerText = `${cookiesPerSecond.toFixed(1)} cookies per second`;
+
+            // Update item rows
+            for (let key in upgrades) {
+                const item = upgrades[key];
+                document.getElementById(`cost-${key}`).innerText = item.cost;
+                document.getElementById(`count-${key}`).innerText = item.count;
+                
+                const element = document.getElementById(`upgrade-${key}`);
+                if (score >= item.cost) {
+                    element.classList.remove('disabled');
+                } else {
+                    element.classList.add('disabled');
+                }
+            }
+        }
+
+        // Game Loop (Runs 10 times a second for smooth collection updates)
+        setInterval(() => {
+            if (cookiesPerSecond > 0) {
+                score += cookiesPerSecond / 10;
+                updateDisplay();
+            }
+        }, 100);
+    </script>
+</body>
+</html>
 
