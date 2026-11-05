@@ -20,14 +20,15 @@
 
         .game-container {
             background: rgba(255, 255, 255, 0.05);
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             text-align: center;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            max-width: 400px;
+            max-width: 440px;
             width: 90%;
+            margin: 20px 0;
         }
 
         h1 {
@@ -41,7 +42,7 @@
         .score-display {
             font-size: 2.5rem;
             font-weight: bold;
-            margin: 10px 0;
+            margin: 5px 0;
             color: #00ffcc;
             text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
         }
@@ -49,21 +50,21 @@
         .cps-display {
             font-size: 1rem;
             color: #a0a0c0;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .cookie-btn {
             background: radial-gradient(circle, #d27d2d, #8b5a2b);
             border: 8px solid #5c3a1a;
             border-radius: 50%;
-            width: 180px;
-            height: 180px;
+            width: 160px;
+            height: 160px;
             cursor: pointer;
             outline: none;
             position: relative;
             box-shadow: 0 8px 0 #402812, 0 15px 20px rgba(0,0,0,0.5);
             transition: transform 0.05s ease, box-shadow 0.05s ease;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .cookie-btn:active {
@@ -71,17 +72,27 @@
             box-shadow: 0 4px 0 #402812, 0 8px 10px rgba(0,0,0,0.5);
         }
 
-        /* Cookie Chocolate Chips */
         .cookie-btn::before {
             content: '';
             position: absolute;
-            top: 30px; left: 40px; width: 18px; height: 14px; background: #3d2511; border-radius: 40%;
-            box-shadow: 60px 20px 0 #3d2511, 20px 70px 0 #3d2511, 80px 75px 0 #3d2511, 45px 40px 0 #3d2511, -10px 50px 0 #3d2511;
+            top: 25px; left: 35px; width: 16px; height: 12px; background: #3d2511; border-radius: 40%;
+            box-shadow: 55px 15px 0 #3d2511, 15px 60px 0 #3d2511, 75px 65px 0 #3d2511, 40px 35px 0 #3d2511, -10px 45px 0 #3d2511;
         }
 
         .shop-container {
-            margin-top: 25px;
+            margin-top: 20px;
             text-align: left;
+            max-height: 340px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .shop-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .shop-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
         }
 
         .shop-title {
@@ -90,6 +101,10 @@
             padding-bottom: 5px;
             margin-bottom: 10px;
             color: #ff79c6;
+            position: sticky;
+            top: 0;
+            background: #232337;
+            z-index: 10;
         }
 
         .upgrade-item {
@@ -97,9 +112,9 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.08);
-            padding: 12px 15px;
+            padding: 10px 12px;
             border-radius: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             transition: background 0.2s, transform 0.2s;
             cursor: pointer;
             border: 1px solid transparent;
@@ -111,7 +126,7 @@
         }
 
         .upgrade-item.disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
             transform: none !important;
             background: rgba(255, 255, 255, 0.03);
@@ -120,22 +135,23 @@
         .upgrade-info .name {
             font-weight: bold;
             display: block;
+            font-size: 0.95rem;
         }
 
         .upgrade-info .effect {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #aaa;
         }
 
         .upgrade-cost {
             font-weight: bold;
             color: #ffd700;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 8px;
             border-radius: 5px;
+            font-size: 0.9rem;
         }
 
-        /* Floating numbers on click */
         .floating-text {
             position: absolute;
             color: #00ffcc;
@@ -144,6 +160,22 @@
             pointer-events: none;
             animation: floatUp 0.8s ease-out forwards;
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+
+        .reset-btn {
+            background: rgba(255, 85, 85, 0.2);
+            border: 1px solid rgba(255, 85, 85, 0.4);
+            color: #ff5555;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .reset-btn:hover {
+            background: rgba(255, 85, 85, 0.4);
         }
 
         @keyframes floatUp {
@@ -190,95 +222,67 @@
                 </div>
                 <div class="upgrade-cost" id="cost-factory">1100</div>
             </div>
+
+            <!-- Upgrade 4 -->
+            <div class="upgrade-item disabled" id="upgrade-mine" onclick="buyUpgrade('mine')">
+                <div class="upgrade-info">
+                    <span class="name">Cookie Mine (<span id="count-mine">0</span>)</span>
+                    <span class="effect">+47.0 CPS</span>
+                </div>
+                <div class="upgrade-cost" id="cost-mine">12000</div>
+            </div>
+
+            <!-- Upgrade 5 -->
+            <div class="upgrade-item disabled" id="upgrade-shipment" onclick="buyUpgrade('shipment')">
+                <div class="upgrade-info">
+                    <span class="name">Space Shipment (<span id="count-shipment">0</span>)</span>
+                    <span class="effect">+260.0 CPS</span>
+                </div>
+                <div class="upgrade-cost" id="cost-shipment">130000</div>
+            </div>
+
+            <!-- Upgrade 6 -->
+            <div class="upgrade-item disabled" id="upgrade-portal" onclick="buyUpgrade('portal')">
+                <div class="upgrade-info">
+                    <span class="name">Cookie Portal (<span id="count-portal">0</span>)</span>
+                    <span class="effect">+1400.0 CPS</span>
+                </div>
+                <div class="upgrade-cost" id="cost-portal">1400000</div>
+            </div>
+
+            <!-- Upgrade 7 -->
+            <div class="upgrade-item disabled" id="upgrade-lab" onclick="buyUpgrade('lab')">
+                <div class="upgrade-info">
+                    <span class="name">Alchemy Lab (<span id="count-lab">0</span>)</span>
+                    <span class="effect">+7800.0 CPS</span>
+                </div>
+                <div class="upgrade-cost" id="cost-lab">20000000</div>
+            </div>
+
+            <!-- Upgrade 8 -->
+            <div class="upgrade-item disabled" id="upgrade-timemachine" onclick="buyUpgrade('timemachine')">
+                <div class="upgrade-info">
+                    <span class="name">Time Machine (<span id="count-timemachine">0</span>)</span>
+                    <span class="effect">+44000.0 CPS</span>
+                </div>
+                <div class="upgrade-cost" id="cost-timemachine">330000000</div>
+            </div>
+
+            <!-- Upgrade 9 -->
+            <div class="upgrade-item disabled" id="upgrade-galaxy" onclick="buyUpgrade('galaxy')">
+                <div class="upgrade-info">
+                    <span class="name">Cookie Galaxy (<span id="count-galaxy">0</span>)</span>
+                    <span class="effect">+260000.0 CPS</span>
+                </div>
+                <div class="upgrade-cost" id="cost-galaxy">5100000000</div>
+            </div>
         </div>
+
+        <button class="reset-btn" onclick="resetGame()">Wipe Save Data</button>
     </div>
 
     <script>
-        // Game State
+        // Game State Core
         let score = 0;
         let cookiesPerSecond = 0;
-
-        const upgrades = {
-            cursor: { count: 0, cost: 15, cps: 0.1, baseCost: 15 },
-            grandma: { count: 0, cost: 100, cps: 1.0, baseCost: 100 },
-            factory: { count: 0, cost: 1100, cps: 8.0, baseCost: 1100 }
-        };
-
-        // Elements
-        const scoreEl = document.getElementById('score');
-        const cpsEl = document.getElementById('cps');
-        const cookieBtn = document.getElementById('cookie-btn');
-
-        // Click Cookie Action
-        cookieBtn.addEventListener('click', (e) => {
-            score += 1;
-            updateDisplay();
-            createFloatingText(e.clientX, e.clientY, "+1");
-        });
-
-        // Floating Number Effect
-        function createFloatingText(x, y, text) {
-            const el = document.createElement('div');
-            el.className = 'floating-text';
-            el.innerText = text;
-            el.style.left = `${x - 15}px`;
-            el.style.top = `${y - 25}px`;
-            document.body.appendChild(el);
-            
-            setTimeout(() => el.remove(), 800);
-        }
-
-        // Buy Upgrade Action
-        function buyUpgrade(type) {
-            const item = upgrades[type];
-            if (score >= item.cost) {
-                score -= item.cost;
-                item.count++;
-                // Increase cost exponentially (15% increase)
-                item.cost = Math.ceil(item.baseCost * Math.pow(1.15, item.count));
-                
-                calculateCPS();
-                updateDisplay();
-            }
-        }
-
-        // Calculate total CPS
-        function calculateCPS() {
-            cookiesPerSecond = 0;
-            for (let key in upgrades) {
-                cookiesPerSecond += upgrades[key].count * upgrades[key].cps;
-            }
-        }
-
-        // Update UI Look
-        function updateDisplay() {
-            // Update Text strings
-            scoreEl.innerText = `${Math.floor(score)} Cookie${Math.floor(score) === 1 ? '' : 's'}`;
-            cpsEl.innerText = `${cookiesPerSecond.toFixed(1)} cookies per second`;
-
-            // Update item rows
-            for (let key in upgrades) {
-                const item = upgrades[key];
-                document.getElementById(`cost-${key}`).innerText = item.cost;
-                document.getElementById(`count-${key}`).innerText = item.count;
-                
-                const element = document.getElementById(`upgrade-${key}`);
-                if (score >= item.cost) {
-                    element.classList.remove('disabled');
-                } else {
-                    element.classList.add('disabled');
-                }
-            }
-        }
-
-        // Game Loop (Runs 10 times a second for smooth collection updates)
-        setInterval(() => {
-            if (cookiesPerSecond > 0) {
-                score += cookiesPerSecond / 10;
-                updateDisplay();
-            }
-        }, 100);
-    </script>
-</body>
-</html>
 
