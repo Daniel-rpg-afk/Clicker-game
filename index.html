@@ -19,7 +19,6 @@
             overflow: hidden;
             position: relative;
         }
-
         .game-container {
             background: rgba(255, 255, 255, 0.05);
             padding: 25px;
@@ -33,29 +32,9 @@
             margin: 20px 0;
             z-index: 5;
         }
-
-        h1 {
-            margin-top: 0;
-            font-size: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #ffd700;
-        }
-
-        .score-display {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 5px 0;
-            color: #00ffcc;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
-        }
-
-        .cps-display {
-            font-size: 1rem;
-            color: #a0a0c0;
-            margin-bottom: 15px;
-        }
-
+        h1 { margin-top: 0; font-size: 2rem; text-transform: uppercase; letter-spacing: 2px; color: #ffd700; }
+        .score-display { font-size: 2.5rem; font-weight: bold; margin: 5px 0; color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
+        .cps-display { font-size: 1rem; color: #a0a0c0; margin-bottom: 15px; }
         .cookie-btn {
             background: radial-gradient(circle, #d27d2d, #8b5a2b);
             border: 8px solid #5c3a1a;
@@ -70,219 +49,249 @@
             margin: 15px 0;
             -webkit-tap-highlight-color: transparent;
         }
-
-        .cookie-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 4px 0 #402812, 0 8px 10px rgba(0,0,0,0.5);
-        }
-
+        .cookie-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #402812, 0 8px 10px rgba(0,0,0,0.5); }
         .cookie-btn::before {
-            content: '';
-            position: absolute;
-            top: 25px; left: 35px; width: 16px; height: 12px; background: #3d2511; border-radius: 40%;
+            content: ''; position: absolute; top: 25px; left: 35px; width: 16px; height: 12px; background: #3d2511; border-radius: 40%;
             box-shadow: 55px 15px 0 #3d2511, 15px 60px 0 #3d2511, 75px 65px 0 #3d2511, 40px 35px 0 #3d2511, -10px 45px 0 #3d2511;
         }
-
-        .shop-container {
-            margin-top: 20px;
-            text-align: left;
-            max-height: 340px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .shop-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        .shop-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-        }
-
-        .shop-title {
-            font-size: 1.2rem;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 5px;
-            margin-bottom: 10px;
-            color: #ff79c6;
-            position: sticky;
-            top: 0;
-            background: #212135;
-            z-index: 10;
-        }
-
-        .upgrade-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 10px 12px;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            transition: background 0.2s, transform 0.2s;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-
-        .upgrade-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: scale(1.02);
-        }
-
-        .upgrade-item.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none !important;
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .upgrade-info .name {
-            font-weight: bold;
-            display: block;
-            font-size: 0.95rem;
-        }
-
-        .upgrade-info .effect {
-            font-size: 0.75rem;
-            color: #aaa;
-        }
-
-        .upgrade-cost {
-            font-weight: bold;
-            color: #ffd700;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 4px 8px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-
-        .floating-text {
-            position: absolute;
-            color: #00ffcc;
-            font-weight: bold;
-            font-size: 1.5rem;
-            pointer-events: none;
-            animation: floatUp 0.8s ease-out forwards;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            z-index: 100;
-        }
-
-        .golden-cookie {
-            position: absolute;
-            background: radial-gradient(circle, #ffe066, #b38f00);
-            border: 4px solid #fff7d9;
-            border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #ffd700, inset 0 0 10px #fff;
-            z-index: 999;
-            animation: goldenPulse 1s infinite alternate, goldenFadeIn 0.5s ease-out;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .golden-cookie::before {
-            content: '';
-            position: absolute;
-            top: 12px; left: 16px; width: 7px; height: 5px; background: #665200; border-radius: 40%;
-            box-shadow: 25px 8px 0 #665200, 8px 28px 0 #665200, 32px 30px 0 #665200, 18px 16px 0 #665200;
-        }
-
-        .reset-btn {
-            background: rgba(255, 85, 85, 0.2);
-            border: 1px solid rgba(255, 85, 85, 0.4);
-            color: #ff5555;
-            padding: 6px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 0.8rem;
-            transition: background 0.2s;
-        }
-        .reset-btn:hover {
-            background: rgba(255, 85, 85, 0.4);
-        }
-
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-100px) scale(0.8); }
-        }
-
-        @keyframes goldenPulse {
-            0% { transform: scale(1); box-shadow: 0 0 15px #ffd700; }
-            100% { transform: scale(1.1); box-shadow: 0 0 30px #ffea80; }
-        }
-
-        @keyframes goldenFadeIn {
-            0% { opacity: 0; transform: scale(0.5); }
-            100% { opacity: 1; transform: scale(1); }
-        }
+        .shop-container { margin-top: 20px; text-align: left; max-height: 340px; overflow-y: auto; padding-right: 5px; }
+        .shop-container::-webkit-scrollbar { width: 6px; }
+        .shop-container::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+        .shop-title { font-size: 1.2rem; border-bottom: 2px solid rgba(255, 255, 255, 0.1); padding-bottom: 5px; margin-bottom: 10px; color: #ff79c6; position: sticky; top: 0; background: #212135; z-index: 10; }
+        .upgrade-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.08); padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; transition: background 0.2s, transform 0.2s; cursor: pointer; border: 1px solid transparent; }
+        .upgrade-item:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.02); }
+        .upgrade-item.disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; background: rgba(255, 255, 255, 0.03); }
+        .upgrade-info .name { font-weight: bold; display: block; font-size: 0.95rem; }
+        .upgrade-info .effect { font-size: 0.75rem; color: #aaa; }
+        .upgrade-cost { font-weight: bold; color: #ffd700; background: rgba(0, 0, 0, 0.3); padding: 4px 8px; border-radius: 5px; font-size: 0.9rem; }
+        .floating-text { position: absolute; color: #00ffcc; font-weight: bold; font-size: 1.5rem; pointer-events: none; animation: floatUp 0.8s ease-out forwards; text-shadow: 0 2px 4px rgba(0,0,0,0.5); z-index: 100; }
+        .golden-cookie { position: absolute; background: radial-gradient(circle, #ffe066, #b38f00); border: 4px solid #fff7d9; border-radius: 50%; width: 70px; height: 70px; cursor: pointer; box-shadow: 0 0 20px #ffd700, inset 0 0 10px #fff; z-index: 999; animation: goldenPulse 1s infinite alternate, goldenFadeIn 0.5s ease-out; -webkit-tap-highlight-color: transparent; }
+        .golden-cookie::before { content: ''; position: absolute; top: 12px; left: 16px; width: 7px; height: 5px; background: #665200; border-radius: 40%; box-shadow: 25px 8px 0 #665200, 8px 28px 0 #665200, 32px 30px 0 #665200, 18px 16px 0 #665200; }
+        .reset-btn { background: rgba(255, 85, 85, 0.2); border: 1px solid rgba(255, 85, 85, 0.4); color: #ff5555; padding: 6px 12px; border-radius: 5px; cursor: pointer; margin-top: 15px; font-size: 0.8rem; transition: background 0.2s; }
+        .reset-btn:hover { background: rgba(255, 85, 85, 0.4); }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-100px) scale(0.8); } }
+        @keyframes goldenPulse { 0% { transform: scale(1); box-shadow: 0 0 15px #ffd700; } 100% { transform: scale(1.1); box-shadow: 0 0 30px #ffea80; } }
+        @keyframes goldenFadeIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
-
     <div class="game-container">
         <h1>Bakery Clicker</h1>
         <div class="score-display" id="score">0 Cookies</div>
         <div class="cps-display" id="cps">0.0 cookies per second</div>
-        
         <button class="cookie-btn" id="cookie-btn"></button>
-
         <div class="shop-container">
             <div class="shop-title">Upgrades Shop</div>
-            
-            <!-- Special Tapping Item -->
             <div class="upgrade-item disabled" id="upgrade-finger" onclick="buyUpgrade('finger')">
-                <div class="upgrade-info">
-                    <span class="name">Reinforced Finger (<span id="count-finger">0</span>)</span>
-                    <span class="effect">+5 per click</span>
-                </div>
+                <div class="upgrade-info"><span class="name">Reinforced Finger (<span id="count-finger">0</span>)</span><span class="effect">+5 per click</span></div>
                 <div class="upgrade-cost" id="cost-finger">500</div>
             </div>
-
-            <!-- Special Golden Luck Item -->
             <div class="upgrade-item disabled" id="upgrade-clover" onclick="buyUpgrade('clover')">
-                <div class="upgrade-info">
-                    <span class="name">Golden Clover (<span id="count-clover">0</span>)</span>
-                    <span class="effect">Gold cookies 50% faster</span>
-                </div>
+                <div class="upgrade-info"><span class="name">Golden Clover (<span id="count-clover">0</span>)</span><span class="effect">Gold cookies 50% faster</span></div>
                 <div class="upgrade-cost" id="cost-clover">5000</div>
             </div>
-
-            <!-- Standard CPS Items -->
             <div class="upgrade-item disabled" id="upgrade-cursor" onclick="buyUpgrade('cursor')">
-                <div class="upgrade-info">
-                    <span class="name">Auto-Clicker (<span id="count-cursor">0</span>)</span>
-                    <span class="effect">+0.1 CPS</span>
-                </div>
+                <div class="upgrade-info"><span class="name">Auto-Clicker (<span id="count-cursor">0</span>)</span><span class="effect">+0.1 CPS</span></div>
                 <div class="upgrade-cost" id="cost-cursor">15</div>
             </div>
-
             <div class="upgrade-item disabled" id="upgrade-grandma" onclick="buyUpgrade('grandma')">
-                <div class="upgrade-info">
-                    <span class="name">Grandma (<span id="count-grandma">0</span>)</span>
-                    <span class="effect">+1.0 CPS</span>
-                </div>
+                <div class="upgrade-info"><span class="name">Grandma (<span id="count-grandma">0</span>)</span><span class="effect">+1.0 CPS</span></div>
                 <div class="upgrade-cost" id="cost-grandma">100</div>
             </div>
-
             <div class="upgrade-item disabled" id="upgrade-factory" onclick="buyUpgrade('factory')">
-                <div class="upgrade-info">
-                    <span class="name">Cookie Factory (<span id="count-factory">0</span>)</span>
-                    <span class="effect">+8.0 CPS</span>
-                </div>
+                <div class="upgrade-info"><span class="name">Cookie Factory (<span id="count-factory">0</span>)</span><span class="effect">+8.0 CPS</span></div>
                 <div class="upgrade-cost" id="cost-factory">1100</div>
             </div>
-
             <div class="upgrade-item disabled" id="upgrade-mine" onclick="buyUpgrade('mine')">
-                <div class="upgrade-info">
-                    <span class="name">Cookie Mine (<span id="count-mine">0</span>)</span>
-                    <span class="effect">+47.0 CPS</span>
-                </div>
+                <div class="upgrade-info"><span class="name">Cookie Mine (<span id="count-mine">0</span>)</span><span class="effect">+47.0 CPS</span></div>
                 <div class="upgrade-cost" id="cost-mine">12000</div>
             </div>
-
             <div class="upgrade-item disabled" id="upgrade-shipment" onclick="buyUpgrade('shipment')">
-                <div class="upgrade-info">
-                    <span class="name">Space Shipment (<span id="count-shipment">0</span>)</span>
-                    <span class="effect">+260.0 CPS</span>
+                <div class="upgrade-info"><span class="name">Space Shipment (<span id="count-shipment">0</span>)</span><span class="effect">+260.0 CPS</span></div>
+                <div class="upgrade-cost" id="cost-shipment">130000</div>
+            </div>
+            <div class="upgrade-item disabled" id="upgrade-portal" onclick="buyUpgrade('portal')">
+                <div class="upgrade-info"><span class="name">Cookie Portal (<span id="count-portal">0</span>)</span><span class="effect">+1400.0 CPS</span></div>
+                <div class="upgrade-cost" id="cost-portal">1400000</div>
+            </div>
+            <div class="upgrade-item disabled" id="upgrade-lab" onclick="buyUpgrade('lab')">
+                <div class="upgrade-info"><span class="name">Alchemy Lab (<span id="count-lab">0</span>)</span><span class="effect">+7800.0 CPS</span></div>
+                <div class="upgrade-cost" id="cost-lab">20000000</div>
+            </div>
+            <div class="upgrade-item disabled" id="upgrade-timemachine" onclick="buyUpgrade('timemachine')">
+                <div class="upgrade-info"><span class="name">Time Machine (<span id="count-timemachine">0</span>)</span><span class="effect">+44000.0 CPS</span></div>
+                <div class="upgrade-cost" id="cost-timemachine">330000000</div>
+            </div>
+            <div class="upgrade-item disabled" id="upgrade-galaxy" onclick="buyUpgrade('galaxy')">
+                <div class="upgrade-info"><span class="name">Cookie Galaxy (<span id="count-galaxy">0</span>)</span><span class="effect">+260000.0 CPS</span></div>
+                <div class="upgrade-cost" id="cost-galaxy">5100000000</div>
+            </div>
+        </div>
+        <button class="reset-btn" onclick="resetGame()">Wipe Save Data</button>
+    </div>
+    <script>
+        let score = 0;
+        let cookiesPerSecond = 0;
+        let baseClickValue = 1;
+
+        const upgrades = {
+            finger: { count: 0, cost: 500, cps: 0, baseCost: 500 },
+            clover: { count: 0, cost: 5000, cps: 0, baseCost: 5000 },
+            cursor: { count: 0, cost: 15, cps: 0.1, baseCost: 15 },
+            grandma: { count: 0, cost: 100, cps: 1.0, baseCost: 100 },
+            factory: { count: 0, cost: 1100, cps: 8.0, baseCost: 1100 },
+            mine: { count: 0, cost: 12000, cps: 47.0, baseCost: 12000 },
+            shipment: { count: 0, cost: 130000, cps: 260.0, baseCost: 130000 },
+            portal: { count: 0, cost: 1400000, cps: 1400.0, baseCost: 1400000 },
+            lab: { count: 0, cost: 20000000, cps: 7800.0, baseCost: 20000000 },
+            timemachine: { count: 0, cost: 330000000, cps: 44000.0, baseCost: 330000000 },
+            galaxy: { count: 0, cost: 5100000000, cps: 260000.0, baseCost: 5100000000 }
+        };
+
+        const scoreEl = document.getElementById('score');
+        const cpsEl = document.getElementById('cps');
+        const cookieBtn = document.getElementById('cookie-btn');
+
+        function loadGame() {
+            const savedData = localStorage.getItem('bakeryClickerSave');
+            if (savedData) {
+                const parsed = JSON.parse(savedData);
+                score = parsed.score || 0;
+                if (parsed.upgrades) {
+                    for (let key in upgrades) {
+                        if (parsed.upgrades[key]) {
+                            upgrades[key].count = parsed.upgrades[key].count || 0;
+                            upgrades[key].cost = parsed.upgrades[key].cost || upgrades[key].baseCost;
+                        }
+                    }
+                }
+            }
+            calculateCPS();
+            updateDisplay();
+        }
+
+        function saveGame() {
+            const saveData = { score: score, upgrades: upgrades };
+            localStorage.setItem('bakeryClickerSave', JSON.stringify(saveData));
+        }
+
+        function resetGame() {
+            if (confirm("Are you sure you want to wipe all your bakery progress?")) {
+                localStorage.removeItem('bakeryClickerSave');
+                score = 0;
+                for (let key in upgrades) {
+                    upgrades[key].count = 0;
+                    upgrades[key].cost = upgrades[key].baseCost;
+                }
+                calculateCPS();
+                updateDisplay();
+            }
+        }
+
+        function handleCookieClick(e) {
+            e.preventDefault();
+            score += baseClickValue;
+            updateDisplay();
+
+            let clickX = 0, clickY = 0;
+            if (e.touches && e.touches.length > 0) {
+                clickX = e.touches[0].clientX;
+                clickY = e.touches[0].clientY;
+            } else if (e.changedTouches && e.changedTouches.length > 0) {
+                clickX = e.changedTouches[0].clientX;
+                clickY = e.changedTouches[0].clientY;
+            } else {
+                clickX = e.clientX;
+                clickY = e.clientY;
+            }
+            createFloatingText(clickX, clickY, `+${baseClickValue}`, "#00ffcc");
+        }
+
+        cookieBtn.addEventListener('click', handleCookieClick);
+        cookieBtn.addEventListener('touchstart', handleCookieClick, { passive: false });
+
+        function createFloatingText(x, y, text, color) {
+            if (!x || !y) return;
+            const el = document.createElement('div');
+            el.className = 'floating-text';
+            el.innerText = text;
+            if (color) el.style.color = color;
+            el.style.left = `${x - 15}px`;
+            el.style.top = `${y - 25}px`;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 800);
+        }
+
+        function spawnGoldenCookie() {
+            if (document.querySelector('.golden-cookie')) return;
+            const golden = document.createElement('div');
+            golden.className = 'golden-cookie';
+            const padding = 80;
+            const x = Math.random() * (window.innerWidth - padding * 2) + padding;
+            const y = Math.random() * (window.innerHeight - padding * 2) + padding;
+            golden.style.left = `${x}px`;
+            golden.style.top = `${y}px`;
+
+            function collectGolden(e) {
+                e.preventDefault(); e.stopPropagation();
+                const bonus = Math.max(50, Math.ceil(cookiesPerSecond * 45));
+                score += bonus;
+                let tapX = 0, tapY = 0;
+                if (e.touches && e.touches.length > 0) {
+                    tapX = e.touches[0].clientX; tapY = e.touches[0].clientY;
+                } else {
+                    tapX = e.clientX; tapY = e.clientY;
+                }
+                createFloatingText(tapX, tapY, `+${bonus} Golden Bonus!`, '#ffd700');
+                golden.remove(); updateDisplay(); saveGame();
+            }
+            golden.addEventListener('click', collectGolden);
+            golden.addEventListener('touchstart', collectGolden, { passive: false });
+            document.body.appendChild(golden);
+            setTimeout(() => { if (golden.parentNode) golden.remove(); }, 15000);
+        }
+
+        function buyUpgrade(type) {
+            const item = upgrades[type];
+            if (score >= item.cost) {
+                score -= item.cost;
+                item.count++;
+                item.cost = Math.ceil(item.baseCost * Math.pow(1.25, item.count));
+                calculateCPS();
+                updateDisplay();
+                saveGame();
+            }
+        }
+
+        function calculateCPS() {
+            cookiesPerSecond = 0;
+            baseClickValue = 1 + (upgrades.finger.count * 5);
+            for (let key in upgrades) {
+                cookiesPerSecond += upgrades[key].count * upgrades[key].cps;
+            }
+        }
+
+        function updateDisplay() {
+            scoreEl.innerText = `${Math.floor(score)} Cookies`;
+            cpsEl.innerText = `${cookiesPerSecond.toFixed(1)} cookies per second`;
+            for (let key in upgrades) {
+                document.getElementById(`count-${key}`).innerText = upgrades[key].count;
+                document.getElementById(`cost-${key}`).innerText = upgrades[key].cost;
+                const upgradeBox = document.getElementById(`upgrade-${key}`);
+                if (score >= upgrades[key].cost) { upgradeBox.classList.remove('disabled'); }
+                else { upgradeBox.classList.add('disabled'); }
+            }
+        }
+
+        setInterval(() => { if (cookiesPerSecond > 0) { score += cookiesPerSecond / 10; updateDisplay(); } }, 100);
+        setInterval(saveGame, 10000);
+        setInterval(() => {
+            let spawnChance = 0.05;
+            if (upgrades.clover.count > 0) { spawnChance += (upgrades.clover.count * 0.05); }
+            if (Math.random() < spawnChance) { spawnGoldenCookie(); }
+        }, 30000);
+
+        window.onload = loadGame;
+    </script>
+</body>
+</html>
