@@ -34,7 +34,21 @@
         }
         h1 { margin-top: 0; font-size: 2rem; text-transform: uppercase; letter-spacing: 2px; color: #ffd700; }
         .score-display { font-size: 2.5rem; font-weight: bold; margin: 5px 0; color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
-        .cps-display { font-size: 1rem; color: #a0a0c0; margin-bottom: 15px; }
+        .cps-display { font-size: 1rem; color: #a0a0c0; margin-bottom: 10px; }
+        
+        /* Frenzy Boost UI Indicators */
+        .boost-container {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid #ffd700;
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            display: none;
+            text-align: center;
+        }
+        .boost-title { font-weight: bold; color: #ffd700; font-size: 1.1rem; text-transform: uppercase; margin-bottom: 4px; }
+        .boost-timer { font-size: 0.9rem; color: #fff; }
+
         .cookie-btn {
             background: radial-gradient(circle, #d27d2d, #8b5a2b);
             border: 8px solid #5c3a1a;
@@ -54,7 +68,7 @@
             content: ''; position: absolute; top: 25px; left: 35px; width: 16px; height: 12px; background: #3d2511; border-radius: 40%;
             box-shadow: 55px 15px 0 #3d2511, 15px 60px 0 #3d2511, 75px 65px 0 #3d2511, 40px 35px 0 #3d2511, -10px 45px 0 #3d2511;
         }
-        .shop-container { margin-top: 20px; text-align: left; max-height: 340px; overflow-y: auto; padding-right: 5px; }
+        .shop-container { margin-top: 20px; text-align: left; max-height: 300px; overflow-y: auto; padding-right: 5px; }
         .shop-container::-webkit-scrollbar { width: 6px; }
         .shop-container::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
         .shop-title { font-size: 1.2rem; border-bottom: 2px solid rgba(255, 255, 255, 0.1); padding-bottom: 5px; margin-bottom: 10px; color: #ff79c6; position: sticky; top: 0; background: #212135; z-index: 10; }
@@ -79,6 +93,13 @@
         <h1>Bakery Clicker</h1>
         <div class="score-display" id="score">0 Cookies</div>
         <div class="cps-display" id="cps">0.0 cookies per second</div>
+        
+        <!-- Boost Box Display -->
+        <div class="boost-container" id="boost-box">
+            <div class="boost-title" id="boost-title">Boost Active!</div>
+            <div class="boost-timer" id="boost-timer">Time Left: 0s</div>
+        </div>
+
         <button class="cookie-btn" id="cookie-btn"></button>
         <div class="shop-container">
             <div class="shop-title">Upgrades Shop</div>
@@ -121,18 +142,15 @@
             <div class="upgrade-item disabled" id="upgrade-timemachine" onclick="buyUpgrade('timemachine')">
                 <div class="upgrade-info"><span class="name">Time Machine (<span id="count-timemachine">0</span>)</span><span class="effect">+44000.0 CPS</span></div>
                 <div class="upgrade-cost" id="cost-timemachine">330000000</div>
-            </div>
-            <div class="upgrade-item disabled" id="upgrade-galaxy" onclick="buyUpgrade('galaxy')">
-                <div class="upgrade-info"><span class="name">Cookie Galaxy (<span id="count-galaxy">0</span>)</span><span class="effect">+260000.0 CPS</span></div>
-                <div class="upgrade-cost" id="cost-galaxy">5100000000</div>
-            </div>
-        </div>
-        <button class="reset-btn" onclick="resetGame()">Wipe Save Data</button>
-    </div>
+                ```html
     <script>
         let score = 0;
         let cookiesPerSecond = 0;
         let baseClickValue = 1;
+
+        // Active Frenzy Boost tracking states
+        let productionFrenzyTimer = 0;
+        let clickFrenzyTimer = 0;
 
         const upgrades = {
             finger: { count: 0, cost: 500, cps: 0, baseCost: 500 },
@@ -151,6 +169,9 @@
         const scoreEl = document.getElementById('score');
         const cpsEl = document.getElementById('cps');
         const cookieBtn = document.getElementById('cookie-btn');
+        const boostBox = document.getElementById('boost-box');
+        const boostTitle = document.getElementById('boost-title');
+        const boostTimerEl = document.getElementById('boost-timer');
 
         function loadGame() {
             const savedData = localStorage.getItem('bakeryClickerSave');
@@ -179,6 +200,8 @@
             if (confirm("Are you sure you want to wipe all your bakery progress?")) {
                 localStorage.removeItem('bakeryClickerSave');
                 score = 0;
+                productionFrenzyTimer = 0;
+                clickFrenzyTimer = 0;
                 for (let key in upgrades) {
                     upgrades[key].count = 0;
                     upgrades[key].cost = upgrades[key].baseCost;
@@ -190,7 +213,14 @@
 
         function handleCookieClick(e) {
             e.preventDefault();
-            score += baseClickValue;
+            
+            // Calculate actual click strength factoring in Click Frenzy (77x)
+            let currentClickPower = baseClickValue;
+            if (clickFrenzyTimer > 0) {
+                currentClickPower = baseClickValue * 77;
+            }
+
+            score += currentClickPower;
             updateDisplay();
 
             let clickX = 0, clickY = 0;
@@ -204,7 +234,10 @@
                 clickX = e.clientX;
                 clickY = e.clientY;
             }
-            createFloatingText(clickX, clickY, `+${baseClickValue}`, "#00ffcc");
+            
+            // If click frenzy is active, color the text gold
+            const textColor = clickFrenzyTimer > 0 ? "#ffd700" : "#00ffcc";
+            createFloatingText(clickX, clickY, `+${currentClickPower}`, textColor);
         }
 
         cookieBtn.addEventListener('click', handleCookieClick);
@@ -234,16 +267,28 @@
 
             function collectGolden(e) {
                 e.preventDefault(); e.stopPropagation();
-                const bonus = Math.max(50, Math.ceil(cookiesPerSecond * 45));
-                score += bonus;
+                
                 let tapX = 0, tapY = 0;
                 if (e.touches && e.touches.length > 0) {
                     tapX = e.touches[0].clientX; tapY = e.touches[0].clientY;
                 } else {
                     tapX = e.clientX; tapY = e.clientY;
                 }
-                createFloatingText(tapX, tapY, `+${bonus} Golden Bonus!`, '#ffd700');
-                golden.remove(); updateDisplay(); saveGame();
+
+                // Roll a 50/50 chance for either production or click frenzy boost mechanics
+                if (Math.random() < 0.5) {
+                    productionFrenzyTimer = 90; // 1 min 30 secs
+                    clickFrenzyTimer = 0; // Cancel alternate boost if active
+                    createFloatingText(tapX, tapY, `Production Frenzy x7!`, '#ffd700');
+                } else {
+                    clickFrenzyTimer = 30; // 30 seconds
+                    productionFrenzyTimer = 0; 
+                    createFloatingText(tapX, tapY, `Click Frenzy x77!`, '#ffd700');
+                }
+
+                golden.remove(); 
+                updateDisplay(); 
+                saveGame();
             }
             golden.addEventListener('click', collectGolden);
             golden.addEventListener('touchstart', collectGolden, { passive: false });
@@ -272,8 +317,28 @@
         }
 
         function updateDisplay() {
+            // Apply 7x multiplier to displayed automated text if production frenzy is active
+            let effectiveCPS = cookiesPerSecond;
+            if (productionFrenzyTimer > 0) {
+                effectiveCPS = cookiesPerSecond * 7;
+            }
+
             scoreEl.innerText = `${Math.floor(score)} Cookies`;
-            cpsEl.innerText = `${cookiesPerSecond.toFixed(1)} cookies per second`;
+            cpsEl.innerText = `${effectiveCPS.toFixed(1)} cookies per second`;
+
+            // Manage visible countdown boxes for active bonuses
+            if (productionFrenzyTimer > 0) {
+                boostBox.style.display = "block";
+                boostTitle.innerText = "Production Frenzy (7x CPS)";
+                boostTimerEl.innerText = `Time Left: ${productionFrenzyTimer}s`;
+            } else if (clickFrenzyTimer > 0) {
+                boostBox.style.display = "block";
+                boostTitle.innerText = "Click Frenzy (77x Click Power)";
+                boostTimerEl.innerText = `Time Left: ${clickFrenzyTimer}s`;
+            } else {
+                boostBox.style.display = "none";
+            }
+
             for (let key in upgrades) {
                 document.getElementById(`count-${key}`).innerText = upgrades[key].count;
                 document.getElementById(`cost-${key}`).innerText = upgrades[key].cost;
@@ -283,15 +348,35 @@
             }
         }
 
-        setInterval(() => { if (cookiesPerSecond > 0) { score += cookiesPerSecond / 10; updateDisplay(); } }, 100);
+        // Ticks 10 times a second to increment automatic point scores cleanly
+        setInterval(() => {
+            let currentIntervalCPS = cookiesPerSecond;
+            if (productionFrenzyTimer > 0) {
+                currentIntervalCPS = cookiesPerSecond * 7;
+            }
+            if (currentIntervalCPS > 0) {
+                score += currentIntervalCPS / 10;
+                updateDisplay();
+            }
+        }, 100);
+
+        // Deducts countdown secondary variables once every 1 full second frame loop
+        setInterval(() => {
+            let needsDisplayUpdate = false;
+            if (productionFrenzyTimer > 0) {
+                productionFrenzyTimer--;
+                needsDisplayUpdate = true;
+            }
+            if (clickFrenzyTimer > 0) {
+                clickFrenzyTimer--;
+                needsDisplayUpdate = true;
+            }
+            if (needsDisplayUpdate) {
+                updateDisplay();
+            }
+        }, 1000);
+
         setInterval(saveGame, 10000);
+
         setInterval(() => {
             let spawnChance = 0.05;
-            if (upgrades.clover.count > 0) { spawnChance += (upgrades.clover.count * 0.05); }
-            if (Math.random() < spawnChance) { spawnGoldenCookie(); }
-        }, 30000);
-
-        window.onload = loadGame;
-    </script>
-</body>
-</html>
