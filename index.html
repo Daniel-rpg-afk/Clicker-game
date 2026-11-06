@@ -13,20 +13,9 @@
         .boost-container { background: rgba(255,215,0,0.15); border: 1px solid #ffd700; border-radius: 10px; padding: 8px 12px; margin-bottom: 15px; display: none; text-align: center; }
         .boost-title { font-weight: bold; color: #ffd700; font-size: 1.1rem; text-transform: uppercase; margin-bottom: 4px; }
         .boost-timer { font-size: 0.9rem; color: #fff; }
-        
-        /* Cookie Button Base Styles */
-        .cookie-btn { background: radial-gradient(circle, #d27d2d, #8b5a2b); border: 8px solid #5c3a1a; border-radius: 50%; width: 160px; height: 160px; cursor: pointer; outline: none; position: relative; box-shadow: 0 8px 0 #402812, 0 15px 20px rgba(0,0,0,0.5); margin: 15px 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; transform-origin: center center; transition: box-shadow 0.05s ease; }
-        .cookie-btn::before { content: ''; position: absolute; top: 25px; left: 35px; width: 16px; height: 12px; background: #3d2511; border-radius: 40%; box-shadow: 55px 15px 0 #3d2511, 15px 60px 0 #3d2511, 75px 65px 0 #3d2511, 40px 35px 0 #3d2511, -10px 45px 0 #3d2511; }
-        
-        /* Cookie Animation Classes */
+        .cookie-btn { background: radial-gradient(circle, #d27d2d, #8b5a2b); border: 8px solid #5c3a1a; border-radius: 50%; width: 160px; height: 160px; cursor: pointer; outline: none; position: relative; box-shadow: 0 8px 0 #402812, 0 15px 20px rgba(0,0,0,0.5); margin: 15px 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; transform-origin: center center; }
         .cookie-click-active { animation: cookieSquish 0.12s ease-out; }
-        @keyframes cookieSquish {
-            0% { transform: scale(1); }
-            30% { transform: scale(0.88, 1.12); }
-            60% { transform: scale(1.14, 0.86); }
-            100% { transform: scale(1); }
-        }
-
+        @keyframes cookieSquish { 0% { transform: scale(1); } 30% { transform: scale(0.88, 1.12); } 60% { transform: scale(1.14, 0.86); } 100% { transform: scale(1); } }
         .shop-container { margin-top: 20px; text-align: left; max-height: 260px; overflow-y: auto; padding-right: 5px; }
         .shop-title { font-size: 1.2rem; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 5px; margin-bottom: 10px; color: #ff79c6; position: sticky; top: 0; background: #232337; z-index: 10; }
         .upgrade-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
@@ -34,7 +23,6 @@
         .upgrade-info .name { font-weight: bold; display: block; font-size: 0.95rem; }
         .upgrade-info .effect { font-size: 0.75rem; color: #aaa; }
         .upgrade-cost { font-weight: bold; color: #ffd700; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 5px; font-size: 0.9rem; }
-        
         .floating-text { position: absolute; font-weight: bold; font-size: 1.6rem; pointer-events: none; animation: floatUp 0.8s ease-out forwards; text-shadow: 0 2px 4px rgba(0,0,0,0.6); z-index: 9999; }
         .golden-cookie { position: absolute; background: radial-gradient(circle, #ffe066, #b38f00); border: 4px solid #fff7d9; border-radius: 50%; width: 70px; height: 70px; cursor: pointer; box-shadow: 0 0 20px #ffd700; z-index: 999; animation: goldenPulse 1s infinite alternate; -webkit-tap-highlight-color: transparent; }
         .reset-btn { background: rgba(255,85,85,0.2); border: 1px solid rgba(255,85,85,0.4); color: #ff5555; padding: 6px 12px; border-radius: 5px; cursor: pointer; margin-top: 15px; font-size: 0.8rem; }
@@ -102,23 +90,15 @@
             let pwr = clickFrenzyTimer > 0 ? baseClickValue * 77 : baseClickValue;
             score += pwr; updateDisplay();
             
-            // iPad-friendly touch coordinates calculation
-            let clientX = e.clientX, clientY = e.clientY;
-            if (e.touches && e.touches.length > 0) {
-                clientX = e.touches[0].clientX; clientY = e.touches[0].clientY;
-            } else if (e.changedTouches && e.changedTouches.length > 0) {
-                clientX = e.changedTouches[0].clientX; clientY = e.changedTouches[0].clientY;
-            }
-            createFloatingText(clientX, clientY, `+${pwr}`, clickFrenzyTimer > 0 ? "#ffd700" : "#00ffcc");
+            let touch = e.touches && e.touches.length > 0 ? e.touches[0] : (e.changedTouches && e.changedTouches.length > 0 ? e.changedTouches[0] : e);
+            createFloatingText(touch.pageX, touch.pageY, `+${pwr}`, clickFrenzyTimer > 0 ? "#ffd700" : "#00ffcc");
             
-            // Trigger cookie click scale animation smoothly
             cookieBtn.classList.remove('cookie-click-active');
-            void cookieBtn.offsetWidth; // Force CSS element reflow reset
-            cookieBtn.add('cookie-click-active');
+            void cookieBtn.offsetWidth;
+            cookieBtn.classList.add('cookie-click-active');
         }
         cookieBtn.addEventListener('touchstart', handleCookieClick, { passive: false });
         cookieBtn.addEventListener('click', handleCookieClick);
-        cookieBtn.addEventListener('animationend', () => cookieBtn.classList.remove('cookie-click-active'));
 
         function createFloatingText(x, y, text, color) {
             const el = document.createElement('div'); el.className = 'floating-text'; el.innerText = text; el.style.color = color; el.style.left = `${x - 20}px`; el.style.top = `${y - 30}px`; document.body.appendChild(el); setTimeout(() => el.remove(), 800);
@@ -130,21 +110,19 @@
             g.style.left = `${Math.random() * (window.innerWidth - 100) + 50}px`; g.style.top = `${Math.random() * (window.innerHeight - 100) + 50}px`;
             function collect(e) {
                 e.preventDefault(); e.stopPropagation();
-                let clientX = e.clientX, clientY = e.clientY;
-                if (e.touches && e.touches.length > 0) { clientX = e.touches[0].clientX; clientY = e.touches[0].clientY; }
-                
-                if (Math.random() < 0.5) { productionFrenzyTimer = 90; clickFrenzyTimer = 0; createFloatingText(clientX, clientY, "Production Frenzy x7!", '#ffd700'); }
-                else { clickFrenzyTimer = 30; productionFrenzyTimer = 0; createFloatingText(clientX, clientY, "Click Frenzy x77!", '#ffd700'); }
+                let touch = e.touches && e.touches.length > 0 ? e.touches[0] : (e.changedTouches && e.changedTouches.length > 0 ? e.changedTouches[0] : e);
+                if (Math.random() < 0.5) { productionFrenzyTimer = 90; clickFrenzyTimer = 0; createFloatingText(touch.pageX, touch.pageY, "Production Frenzy x7!", '#ffd700'); }
+                else { clickFrenzyTimer = 30; productionFrenzyTimer = 0; createFloatingText(touch.pageX, touch.pageY, "Click Frenzy x77!", '#ffd700'); }
                 g.remove(); updateDisplay(); saveGame();
             }
-            g.addEventListener('touchstart', collect, { passive: false }); g.addEventListener('click', collect); document.body.appendChild(g); setTimeout(() => g.remove(), 15000);
+            g.addEventListener('touchstart', collect, { passive: false }); g.addEventListener('click', collect); document.body.appendChild(g); setTimeout(() => { if (g.parentNode) g.remove(); }, 15000);
         }
 
         function buyUpgrade(type) {
             const item = upgrades[type];
             if (score >= item.cost) { score -= item.cost; item.count++; item.cost = Math.ceil(item.baseCost * Math.pow(1.25, item.count)); calculateCPS(); updateDisplay(); saveGame(); }
         }
-        function calculateCPS() { cookiesPerSecond = 0; baseClickValue = 1 + (upgrades.finger.count * 5); for (let k in upgrades) cookiesPerSecond += upgrades[k].count * (upgrades[k].cps || 0); }
+        function calculateCPS() { cookiesPerSecond = 0; baseClickValue = 1 + (upgrades.finger.count * 5); for (let k in upgrades) { if (k !== 'finger' && k !== 'clover') { cookiesPerSecond += upgrades[k].count * (upgrades[k].cps || 0); } } }
 
         function updateDisplay() {
             let effCPS = productionFrenzyTimer > 0 ? cookiesPerSecond * 7 : cookiesPerSecond;
@@ -165,3 +143,4 @@
     </script>
 </body>
 </html>
+
