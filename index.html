@@ -36,7 +36,6 @@
         .score-display { font-size: 2.5rem; font-weight: bold; margin: 5px 0; color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
         .cps-display { font-size: 1rem; color: #a0a0c0; margin-bottom: 10px; }
         
-        /* Frenzy Boost UI Indicators */
         .boost-container {
             background: rgba(255, 215, 0, 0.15);
             border: 1px solid #ffd700;
@@ -94,7 +93,6 @@
         <div class="score-display" id="score">0 Cookies</div>
         <div class="cps-display" id="cps">0.0 cookies per second</div>
         
-        <!-- Boost Box Display -->
         <div class="boost-container" id="boost-box">
             <div class="boost-title" id="boost-title">Boost Active!</div>
             <div class="boost-timer" id="boost-timer">Time Left: 0s</div>
@@ -142,13 +140,12 @@
             <div class="upgrade-item disabled" id="upgrade-timemachine" onclick="buyUpgrade('timemachine')">
                 <div class="upgrade-info"><span class="name">Time Machine (<span id="count-timemachine">0</span>)</span><span class="effect">+44000.0 CPS</span></div>
                 <div class="upgrade-cost" id="cost-timemachine">330000000</div>
-                ```html
-    <script>
+            </div>
+  <script>
         let score = 0;
         let cookiesPerSecond = 0;
         let baseClickValue = 1;
 
-        // Active Frenzy Boost tracking states
         let productionFrenzyTimer = 0;
         let clickFrenzyTimer = 0;
 
@@ -214,7 +211,6 @@
         function handleCookieClick(e) {
             e.preventDefault();
             
-            // Calculate actual click strength factoring in Click Frenzy (77x)
             let currentClickPower = baseClickValue;
             if (clickFrenzyTimer > 0) {
                 currentClickPower = baseClickValue * 77;
@@ -235,7 +231,6 @@
                 clickY = e.clientY;
             }
             
-            // If click frenzy is active, color the text gold
             const textColor = clickFrenzyTimer > 0 ? "#ffd700" : "#00ffcc";
             createFloatingText(clickX, clickY, `+${currentClickPower}`, textColor);
         }
@@ -275,14 +270,13 @@
                     tapX = e.clientX; tapY = e.clientY;
                 }
 
-                // Roll a 50/50 chance for either production or click frenzy boost mechanics
                 if (Math.random() < 0.5) {
-                    productionFrenzyTimer = 90; // 1 min 30 secs
-                    clickFrenzyTimer = 0; // Cancel alternate boost if active
+                    productionFrenzyTimer = 90;
+                    clickFrenzyTimer = 0;
                     createFloatingText(tapX, tapY, `Production Frenzy x7!`, '#ffd700');
                 } else {
-                    clickFrenzyTimer = 30; // 30 seconds
-                    productionFrenzyTimer = 0; 
+                    clickFrenzyTimer = 30;
+                    productionFrenzyTimer = 0;
                     createFloatingText(tapX, tapY, `Click Frenzy x77!`, '#ffd700');
                 }
 
@@ -317,7 +311,6 @@
         }
 
         function updateDisplay() {
-            // Apply 7x multiplier to displayed automated text if production frenzy is active
             let effectiveCPS = cookiesPerSecond;
             if (productionFrenzyTimer > 0) {
                 effectiveCPS = cookiesPerSecond * 7;
@@ -326,7 +319,6 @@
             scoreEl.innerText = `${Math.floor(score)} Cookies`;
             cpsEl.innerText = `${effectiveCPS.toFixed(1)} cookies per second`;
 
-            // Manage visible countdown boxes for active bonuses
             if (productionFrenzyTimer > 0) {
                 boostBox.style.display = "block";
                 boostTitle.innerText = "Production Frenzy (7x CPS)";
@@ -348,7 +340,6 @@
             }
         }
 
-        // Ticks 10 times a second to increment automatic point scores cleanly
         setInterval(() => {
             let currentIntervalCPS = cookiesPerSecond;
             if (productionFrenzyTimer > 0) {
@@ -360,7 +351,6 @@
             }
         }, 100);
 
-        // Deducts countdown secondary variables once every 1 full second frame loop
         setInterval(() => {
             let needsDisplayUpdate = false;
             if (productionFrenzyTimer > 0) {
@@ -380,3 +370,11 @@
 
         setInterval(() => {
             let spawnChance = 0.05;
+            if (upgrades.clover.count > 0) { spawnChance += (upgrades.clover.count * 0.05); }
+            if (Math.random() < spawnChance) { spawnGoldenCookie(); }
+        }, 30000);
+
+        window.onload = loadGame;
+    </script>
+</body>
+</html>
