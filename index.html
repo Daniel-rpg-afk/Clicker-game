@@ -13,9 +13,61 @@
         .boost-container { background: rgba(255,215,0,0.15); border: 1px solid #ffd700; border-radius: 10px; padding: 8px 12px; margin-bottom: 15px; display: none; text-align: center; }
         .boost-title { font-weight: bold; color: #ffd700; font-size: 1.1rem; text-transform: uppercase; margin-bottom: 4px; }
         .boost-timer { font-size: 0.9rem; color: #fff; }
-        .cookie-btn { background: radial-gradient(circle, #d27d2d, #8b5a2b); border: 8px solid #5c3a1a; border-radius: 50%; width: 160px; height: 160px; cursor: pointer; outline: none; position: relative; box-shadow: 0 8px 0 #402812, 0 15px 20px rgba(0,0,0,0.5); margin: 15px 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; transform-origin: center center; }
+        
+        /* Realistic Textured Cookie Button */
+        .cookie-btn { 
+            background: radial-gradient(circle at 30% 30%, #e59849 0%, #c3762b 70%, #935116 100%); 
+            border: 6px solid #6e3a0f; 
+            border-radius: 50%; 
+            width: 170px; 
+            height: 170px; 
+            cursor: pointer; 
+            outline: none; 
+            position: relative; 
+            box-shadow: 0 10px 0 #4d2607, 0 15px 25px rgba(0,0,0,0.6); 
+            margin: 15px 0; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
+            transform-origin: center center;
+        }
+        
+        /* Detailed Chocolate Chips Layout */
+        .cookie-btn::before { 
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%;
+            background-image: 
+                radial-gradient(circle at 45px 45px, #3d2511 8px, transparent 9px),
+                radial-gradient(circle at 115px 40px, #2c1a0b 7px, transparent 8px),
+                radial-gradient(circle at 35px 105px, #3d2511 9px, transparent 10px),
+                radial-gradient(circle at 95px 120px, #2c1a0b 8px, transparent 9px),
+                radial-gradient(circle at 80px 75px, #4a2f19 8px, transparent 9px),
+                radial-gradient(circle at 130px 90px, #3d2511 7px, transparent 8px);
+            filter: drop-shadow(1px 2px 1px rgba(0,0,0,0.4));
+        }
+        
         .cookie-click-active { animation: cookieSquish 0.12s ease-out; }
         @keyframes cookieSquish { 0% { transform: scale(1); } 30% { transform: scale(0.88, 1.12); } 60% { transform: scale(1.14, 0.86); } 100% { transform: scale(1); } }
+        
+        /* Mini Cookie Particle System Styles */
+        .crumb { 
+            position: absolute; 
+            width: 18px; 
+            height: 18px; 
+            border-radius: 50%; 
+            background: radial-gradient(circle at 30% 30%, #e59849, #bc7126); 
+            border: 1px solid #5a300d;
+            box-shadow: inset -2px -2px 0 #3d2511, 0 2px 4px rgba(0,0,0,0.4);
+            pointer-events: none; 
+            z-index: 999; 
+            transform-origin: center center;
+        }
+        .crumb::before {
+            content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            background-image: 
+                radial-gradient(circle at 4px 5px, #2c1a0b 2px, transparent 2.5px),
+                radial-gradient(circle at 12px 6px, #2c1a0b 1.5px, transparent 2px),
+                radial-gradient(circle at 8px 12px, #2c1a0b 2px, transparent 2.5px);
+        }
+
         .shop-container { margin-top: 20px; text-align: left; max-height: 260px; overflow-y: auto; padding-right: 5px; }
         .shop-title { font-size: 1.2rem; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 5px; margin-bottom: 10px; color: #ff79c6; position: sticky; top: 0; background: #232337; z-index: 10; }
         .upgrade-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
@@ -85,6 +137,42 @@
         function saveGame() { localStorage.setItem('bakeryClickerSave', JSON.stringify({ score, upgrades })); }
         function resetGame() { if (confirm("Wipe data?")) { localStorage.removeItem('bakeryClickerSave'); score = 0; productionFrenzyTimer = 0; clickFrenzyTimer = 0; for (let k in upgrades) { upgrades[k].count = 0; upgrades[k].cost = upgrades[k].baseCost; } calculateCPS(); updateDisplay(); } }
 
+        function spawnCookieCrumbs(x, y) {
+            for (let i = 0; i < 5; i++) {
+                const crumb = document.createElement('div');
+                crumb.className = 'crumb';
+                crumb.style.left = `${x}px`;
+                crumb.style.top = `${y}px`;
+                document.body.appendChild(crumb);
+
+                let angle = Math.random() * Math.PI * 2;
+                let speed = Math.random() * 4 + 2;
+                let vx = Math.cos(angle) * speed;
+                let vy = Math.sin(angle) * speed - 3;
+                let rotation = Math.random() * 360;
+                let rotSpeed = (Math.random() - 0.5) * 10;
+
+                let px = x, py = y;
+                let gravity = 0.4;
+
+                let particleInterval = setInterval(() => {
+                    vy += gravity;
+                    px += vx;
+                    py += vy;
+                    rotation += rotSpeed;
+
+                    crumb.style.left = `${px}px`;
+                    crumb.style.top = `${py}px`;
+                    crumb.style.transform = `rotate(${rotation}deg)`;
+
+                    if (py > window.innerHeight + 50) {
+                        clearInterval(particleInterval);
+                        crumb.remove();
+                    }
+                }, 16);
+            }
+        }
+
         function handleCookieClick(e) {
             e.preventDefault();
             let pwr = clickFrenzyTimer > 0 ? baseClickValue * 77 : baseClickValue;
@@ -92,6 +180,7 @@
             
             let touch = e.touches && e.touches.length > 0 ? e.touches[0] : (e.changedTouches && e.changedTouches.length > 0 ? e.changedTouches[0] : e);
             createFloatingText(touch.pageX, touch.pageY, `+${pwr}`, clickFrenzyTimer > 0 ? "#ffd700" : "#00ffcc");
+            spawnCookieCrumbs(touch.pageX, touch.pageY);
             
             cookieBtn.classList.remove('cookie-click-active');
             void cookieBtn.offsetWidth;
@@ -111,6 +200,7 @@
             function collect(e) {
                 e.preventDefault(); e.stopPropagation();
                 let touch = e.touches && e.touches.length > 0 ? e.touches[0] : (e.changedTouches && e.changedTouches.length > 0 ? e.changedTouches[0] : e);
+                
                 if (Math.random() < 0.5) { productionFrenzyTimer = 90; clickFrenzyTimer = 0; createFloatingText(touch.pageX, touch.pageY, "Production Frenzy x7!", '#ffd700'); }
                 else { clickFrenzyTimer = 30; productionFrenzyTimer = 0; createFloatingText(touch.pageX, touch.pageY, "Click Frenzy x77!", '#ffd700'); }
                 g.remove(); updateDisplay(); saveGame();
@@ -143,4 +233,3 @@
     </script>
 </body>
 </html>
-
